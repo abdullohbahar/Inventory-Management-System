@@ -14,6 +14,7 @@
                             <input
                                 type="text"
                                 class="form-control"
+                                name="name"
                                 placeholder="Full name"
                             />
                             <div class="input-group-append">
@@ -27,6 +28,7 @@
                                 type="email"
                                 class="form-control"
                                 placeholder="Email"
+                                name="email"
                             />
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -39,6 +41,7 @@
                                 type="password"
                                 class="form-control"
                                 placeholder="Password"
+                                name="password"
                             />
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -51,6 +54,7 @@
                                 type="password"
                                 class="form-control"
                                 placeholder="Retype password"
+                                name="password_confirmation"
                             />
                             <div class="input-group-append">
                                 <div class="input-group-text">

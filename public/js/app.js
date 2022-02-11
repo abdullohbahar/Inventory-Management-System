@@ -5505,6 +5505,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
 
 /***/ }),
@@ -28593,7 +28597,7 @@ var staticRenderFns = [
         _c("div", { staticClass: "input-group mb-3" }, [
           _c("input", {
             staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Full name" },
+            attrs: { type: "text", name: "name", placeholder: "Full name" },
           }),
           _vm._v(" "),
           _c("div", { staticClass: "input-group-append" }, [
@@ -28606,7 +28610,7 @@ var staticRenderFns = [
         _c("div", { staticClass: "input-group mb-3" }, [
           _c("input", {
             staticClass: "form-control",
-            attrs: { type: "email", placeholder: "Email" },
+            attrs: { type: "email", placeholder: "Email", name: "email" },
           }),
           _vm._v(" "),
           _c("div", { staticClass: "input-group-append" }, [
@@ -28619,7 +28623,11 @@ var staticRenderFns = [
         _c("div", { staticClass: "input-group mb-3" }, [
           _c("input", {
             staticClass: "form-control",
-            attrs: { type: "password", placeholder: "Password" },
+            attrs: {
+              type: "password",
+              placeholder: "Password",
+              name: "password",
+            },
           }),
           _vm._v(" "),
           _c("div", { staticClass: "input-group-append" }, [
@@ -28632,7 +28640,11 @@ var staticRenderFns = [
         _c("div", { staticClass: "input-group mb-3" }, [
           _c("input", {
             staticClass: "form-control",
-            attrs: { type: "password", placeholder: "Retype password" },
+            attrs: {
+              type: "password",
+              placeholder: "Retype password",
+              name: "password_confirmation",
+            },
           }),
           _vm._v(" "),
           _c("div", { staticClass: "input-group-append" }, [
