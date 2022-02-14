@@ -29,7 +29,7 @@
 <div id="app">
   <div class="wrapper">
     <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light" id="v-nav" v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/forgot-password' ? false : true " style="display: none">
       <!-- Left navbar links -->
       <ul class="navbar-nav">
         <li class="nav-item">
@@ -51,9 +51,9 @@
               <i class="fas fa-users mr-2"></i> Profile
             </a>
             <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item btn btn-danger">
-              <button class="btn btn-danger">Logout</button>
-            </a>
+            <router-link to="/logout" class="dropdown-item btn btn-danger">
+              Logout
+            </router-link>
           </div>
         </li>
       </ul>
@@ -61,7 +61,7 @@
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside class="main-sidebar sidebar-dark-primary elevation-4" id="v-sidebar" v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/forgot-password' ? false : true " style="display: none">
       <!-- Brand Logo -->
       <a href="index3.html" class="brand-link text-center">
         <span class="brand-text font-weight-bold text-center">INVENTORY</span>
@@ -119,7 +119,7 @@
     <!-- /.control-sidebar -->
 
     <!-- Main Footer -->
-    <footer class="main-footer">
+    <footer class="main-footer" id="v-footer" v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/forgot-password' ? false : true " style="display: none">
       <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
@@ -139,6 +139,14 @@
 <!-- AdminLTE -->
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 <script src="{{ asset('js/app.js') }}"></script>
+<script>
+  let token = localStorage.getItem('token');
+  if(token){
+    $("#v-nav").css("display","");
+    $("#v-sidebar").css("display","");
+    $("#v-footer").css("display","");
+  }
+</script>
 
 
 <!-- OPTIONAL SCRIPTS -->

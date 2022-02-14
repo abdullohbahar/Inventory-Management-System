@@ -9,13 +9,14 @@
                 <div class="card-body register-card-body">
                     <p class="login-box-msg">Register a new account</p>
 
-                    <form action="../../index.html" method="post">
+                    <form class="user" @submit.prevent="signup">
                         <div class="input-group mb-3">
                             <input
                                 type="text"
                                 class="form-control"
                                 name="name"
                                 placeholder="Full name"
+                                v-model="form.name"
                             />
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -29,6 +30,7 @@
                                 class="form-control"
                                 placeholder="Email"
                                 name="email"
+                                v-model="form.email"
                             />
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -42,6 +44,7 @@
                                 class="form-control"
                                 placeholder="Password"
                                 name="password"
+                                v-model="form.password"
                             />
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -55,6 +58,7 @@
                                 class="form-control"
                                 placeholder="Retype password"
                                 name="password_confirmation"
+                                v-model="form.password_confirmation"
                             />
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -86,7 +90,42 @@
 </template>
 
 <script>
-export default {};
+export default {
+    created() {
+        if (User.loggedIn()) {
+            this.$router.push({ name: "home" });
+        }
+    },
+
+    data() {
+        return {
+            form: {
+                name: null,
+                email: null,
+                password: null,
+                confirm_password: null,
+            },
+            errors: {},
+        };
+    },
+    methods: {
+        signup() {
+            axios
+                .post("/api/auth/signup", this.form)
+                .then((res) => {
+                    User.responseAfterLogin(res);
+
+                    Toast.fire({
+                        icon: "success",
+                        title: "Signed in successfully",
+                    });
+
+                    this.$router.push({ name: "home" });
+                })
+                .catch((error) => (this.errors = error.response.data.errors));
+        },
+    },
+};
 </script>
 
 <style lang=""></style>
