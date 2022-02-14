@@ -10,13 +10,52 @@ let forget = require("./components/auth/forget.vue").default;
 // Logout
 let logout = require("./components/auth/logout.vue").default;
 
-// Home Page
+// Dashbiard Page
 let home = require("./components/home.vue").default;
 
+// Employee Page
+let storeemployee = require("./components/employee/create.vue").default;
+
 export const routes = [
-    { path: "/", component: login, name: "/" },
-    { path: "/register", component: register, name: "register" },
-    { path: "/forgot-password", component: forget, name: "forgot-password" },
-    { path: "/logout", component: logout, name: "logout" },
-    { path: "/home", component: home, name: "home" },
+    // Dashboard Page
+    {
+        path: "/",
+        component: login,
+        name: "/",
+    },
+
+    // Register Page
+    {
+        path: "/register",
+        component: register,
+        name: "register",
+    },
+
+    // Forgot password Page
+    {
+        path: "/forgot-password",
+        component: forget,
+        name: "forgot-password",
+    },
+
+    // Logout
+    {
+        path: "/logout",
+        component: logout,
+        name: "logout",
+    },
+
+    // Dashboard Page
+    {
+        path: "/home",
+        component: home,
+        name: "home",
+    },
+
+    // Add Employee page
+    {
+        path: "/store-employee",
+        component: storeemployee,
+        name: "store-employee",
+    },
 ];
