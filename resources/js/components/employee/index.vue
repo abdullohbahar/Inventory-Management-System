@@ -38,6 +38,21 @@
                                         >Add Employee</router-link
                                     >
                                 </h3>
+                                <div class="card-tools">
+                                    <div
+                                        class="input-group input-group-sm"
+                                        style="width: 150px"
+                                    >
+                                        <input
+                                            type="text"
+                                            v-model="searchTerm"
+                                            name="table_search"
+                                            class="form-control float-right mt-2"
+                                            placeholder="Search Here"
+                                            style="width: 100px"
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="card-body p-0">
@@ -54,7 +69,7 @@
                                     </thead>
                                     <tbody>
                                         <tr
-                                            v-for="employee in employees"
+                                            v-for="employee in filtersearch"
                                             :key="employee.id"
                                         >
                                             <td>{{ employee.name }}</td>
@@ -144,7 +159,15 @@ export default {
     data() {
         return {
             employees: [],
+            searchTerm: "",
         };
+    },
+    computed: {
+        filtersearch() {
+            return this.employees.filter((employee) => {
+                return employee.name.match(this.searchTerm);
+            });
+        },
     },
     methods: {
         allEmployee() {

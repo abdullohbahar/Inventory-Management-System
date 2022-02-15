@@ -6084,6 +6084,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_defineProperty({
   created: function created() {
     if (!User.loggedIn()) {
@@ -6094,16 +6109,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
-      employees: []
+      employees: [],
+      searchTerm: ""
     };
+  },
+  computed: {
+    filtersearch: function filtersearch() {
+      var _this = this;
+
+      return this.employees.filter(function (employee) {
+        return employee.name.match(_this.searchTerm);
+      });
+    }
   },
   methods: {
     allEmployee: function allEmployee() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get("/api/employee").then(function (_ref) {
         var data = _ref.data;
-        return _this.employees = data;
+        return _this2.employees = data;
       })["catch"]();
     }
   }
@@ -37803,6 +37828,44 @@ var render = function () {
                   ],
                   1
                 ),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-tools" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "input-group input-group-sm",
+                      staticStyle: { width: "150px" },
+                    },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.searchTerm,
+                            expression: "searchTerm",
+                          },
+                        ],
+                        staticClass: "form-control float-right mt-2",
+                        staticStyle: { width: "100px" },
+                        attrs: {
+                          type: "text",
+                          name: "table_search",
+                          placeholder: "Search Here",
+                        },
+                        domProps: { value: _vm.searchTerm },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.searchTerm = $event.target.value
+                          },
+                        },
+                      }),
+                    ]
+                  ),
+                ]),
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "card-body p-0" }, [
@@ -37811,7 +37874,7 @@ var render = function () {
                   _vm._v(" "),
                   _c(
                     "tbody",
-                    _vm._l(_vm.employees, function (employee) {
+                    _vm._l(_vm.filtersearch, function (employee) {
                       return _c("tr", { key: employee.id }, [
                         _c("td", [_vm._v(_vm._s(employee.name))]),
                         _vm._v(" "),
