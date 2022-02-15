@@ -17,7 +17,6 @@
                                 placeholder="Email"
                                 name="email"
                                 v-model="form.email"
-                                required
                             />
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -35,7 +34,6 @@
                                 placeholder="Password"
                                 name="password"
                                 v-model="form.password"
-                                required
                             />
                             <div class="input-group-append">
                                 <div class="input-group-text">

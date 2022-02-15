@@ -30,8 +30,16 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
+                            <div class="card-header">
+                                <router-link
+                                    to="/employee"
+                                    class="btn btn-primary"
+                                    >All Employee</router-link
+                                >
+                            </div>
                             <div class="card-body">
                                 <form
+                                    class="user"
                                     @submit.prevent="employeeInsert"
                                     enctype="multipart/form-data"
                                 >
@@ -176,6 +184,7 @@
                                                 type="file"
                                                 class="form-control"
                                                 id=""
+                                                @change="onFileSelected"
                                             />
                                         </div>
                                         <small
@@ -188,7 +197,7 @@
                                             class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3"
                                         >
                                             <img
-                                                src="form.photo"
+                                                :src="form.photo"
                                                 style="
                                                     height: 100px;
                                                     width: 150px;
@@ -234,7 +243,7 @@ export default {
                 email: null,
                 phone: null,
                 sallary: null,
-                joinning_date: null,
+                joining_date: null,
                 nid: null,
                 address: null,
                 photo: null,
@@ -243,7 +252,28 @@ export default {
         };
     },
     methods: {
-        employeeInsert() {},
+        onFileSelected(event) {
+            let file = event.target.files[0];
+            if (file.size > 1048770) {
+                Notification.image_validation();
+            } else {
+                let reader = new FileReader();
+                reader.onload = (event) => {
+                    this.form.photo = event.target.result;
+                    console.log(event.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+        employeeInsert() {
+            axios
+                .post("/api/employee", this.form)
+                .then(() => {
+                    this.$router.push({ name: "employee" });
+                    Notification.success();
+                })
+                .catch((error) => (this.errors = error.response.data.errors));
+        },
     },
 };
 </script>
