@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 
 class EmployeeController extends Controller
@@ -76,7 +77,8 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        //
+        $employee = Employee::where('id', $id)->first();
+        return response()->json($employee);
     }
 
     /**
@@ -88,7 +90,44 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'sallary' => $request->sallary,
+            'joining_date' => $request->joining_date,
+            'nid' => $request->nid,
+            'address' => $request->address,
+        ];
+
+        $image = $request->newphoto;
+
+        if ($image) {
+            $position = strpos($image, ';');
+            $sub = substr($image, 0, $position);
+            $ext = explode('/', $sub)[1];
+
+            $name = time() . "." . $ext;
+            $img = Image::make($image)->resize(240, 200);
+            $upload_path = 'image/employee/';
+            $image_url = $upload_path . $name;
+            $success = $img->save($image_url);
+
+            if ($success) {
+                $data['photo'] = $image_url;
+                $img = Employee::where('id', $id)->first();
+                $image_path = $img->photo;
+                unlink($image_path);
+
+                $update = Employee::findorfail($id);
+                $update->update($data);
+            }
+        } else {
+            $oldphoto = $request->photo;
+            $data['photo'] = $oldphoto;
+
+            Employee::where('id', $id)->update($data);
+        }
     }
 
     /**
@@ -99,6 +138,13 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $employee = Employee::where('id', $id)->first();
+        $photo = $employee->photo;
+        if ($photo) {
+            unlink($photo);
+            Employee::where('id', $id)->delete();
+        } else {
+            Employee::where('id', $id)->delete();
+        }
     }
 }

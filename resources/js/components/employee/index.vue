@@ -86,24 +86,35 @@
                                             <td>{{ employee.joining_date }}</td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button
-                                                        type="button"
+                                                    <router-link
+                                                        to=""
                                                         class="btn btn-info"
                                                     >
                                                         <i
                                                             class="far fa-eye"
                                                         ></i>
-                                                    </button>
-                                                    <button
+                                                    </router-link>
+                                                    <router-link
+                                                        :to="{
+                                                            name: 'edit-employee',
+                                                            params: {
+                                                                id: employee.id,
+                                                            },
+                                                        }"
                                                         type="button"
                                                         class="btn btn-warning"
                                                     >
                                                         <i
                                                             class="far fa-edit"
                                                         ></i>
-                                                    </button>
+                                                    </router-link>
                                                     <button
                                                         type="button"
+                                                        @click="
+                                                            deleteEmployee(
+                                                                employee.id
+                                                            )
+                                                        "
                                                         class="btn btn-danger"
                                                     >
                                                         <i
@@ -165,7 +176,10 @@ export default {
     computed: {
         filtersearch() {
             return this.employees.filter((employee) => {
-                return employee.name.match(this.searchTerm);
+                return (
+                    employee.name.match(this.searchTerm) ||
+                    employee.phone.match(this.searchTerm)
+                );
             });
         },
     },
@@ -175,6 +189,37 @@ export default {
                 .get("/api/employee")
                 .then(({ data }) => (this.employees = data))
                 .catch();
+        },
+        deleteEmployee(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .delete("/api/employee/" + id)
+                        .then(() => {
+                            this.employees = this.employees.filter(
+                                (employee) => {
+                                    return employee.id != id;
+                                }
+                            );
+                        })
+                        .catch(() => {
+                            this.$router.push({ name: "employee" });
+                        });
+                    Swal.fire(
+                        "Deleted!",
+                        "Your file has been deleted.",
+                        "success"
+                    );
+                }
+            });
         },
     },
     created() {

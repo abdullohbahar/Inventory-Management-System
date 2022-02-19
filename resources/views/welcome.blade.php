@@ -175,6 +175,7 @@
     $("#v-sidebar").css("display","");
     $("#v-footer").css("display","");
   }
+
 </script>
 
 

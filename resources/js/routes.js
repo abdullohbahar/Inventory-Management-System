@@ -14,8 +14,9 @@ let logout = require("./components/auth/logout.vue").default;
 let home = require("./components/home.vue").default;
 
 // Employee Page
-let storeemployee = require("./components/employee/create.vue").default;
 let employee = require("./components/employee/index.vue").default;
+let storeemployee = require("./components/employee/create.vue").default;
+let editemployee = require("./components/employee/edit.vue").default;
 
 export const routes = [
     // Dashboard Page
@@ -65,5 +66,12 @@ export const routes = [
         path: "/store-employee",
         component: storeemployee,
         name: "store-employee",
+    },
+
+    // Edit Employee
+    {
+        path: "/edit-employee/:id",
+        component: editemployee,
+        name: "edit-employee",
     },
 ];
