@@ -115,13 +115,13 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <router-link to="#" class="nav-link">
+                  <router-link to="/supplier" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>All Supplier</p>
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link to="#" class="nav-link">
+                  <router-link to="/store-supplier" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Add Supplier</p>
                   </router-link>
