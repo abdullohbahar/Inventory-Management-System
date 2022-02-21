@@ -128,6 +128,29 @@
                 </li>
               </ul>
             </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-user-plus"></i>
+                <p>
+                  Category
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <router-link to="/category" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>All Category</p>
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/store-category" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Add Category</p>
+                  </router-link>
+                </li>
+              </ul>
+            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
