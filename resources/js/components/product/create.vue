@@ -140,7 +140,7 @@
                                             <label for="">Root</label>
                                             <input
                                                 type="text"
-                                                v-model="form.category_name"
+                                                v-model="form.root"
                                                 id=""
                                                 class="form-control"
                                                 placeholder="Root"

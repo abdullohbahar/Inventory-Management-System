@@ -18,7 +18,7 @@ class ProductController extends Controller
     public function index()
     {
         // $product = Product::all();
-        $product = DB::table('product')
+        $product = DB::table('products')
             ->join('categories', 'products.category_id', 'categories.id')
             ->join('suppliers', 'products.supplier_id', 'suppliers.id')
             ->select('categories.category_name', 'suppliers.name', 'products.*')
@@ -92,7 +92,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::where('id', $id)->first();
+        return response()->json($product);
     }
 
     /**
@@ -104,7 +105,46 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = [
+            'product_name' => $request->product_name,
+            'product_code' => $request->product_code,
+            'category_id' => $request->category_id,
+            'supplier_id' => $request->supplier_id,
+            'buying_price' => $request->buying_price,
+            'selling_price' => $request->selling_price,
+            'buying_date' => $request->buying_date,
+            'product_quantity' => $request->product_quantity,
+            'root' => $request->root,
+        ];
+
+        $image = $request->newimage;
+
+        if ($image) {
+            $position = strpos($image, ';');
+            $sub = substr($image, 0, $position);
+            $ext = explode('/', $sub)[1];
+
+            $name = time() . "." . $ext;
+            $img = Image::make($image)->resize(240, 200);
+            $upload_path = 'image/product/';
+            $image_url = $upload_path . $name;
+            $success = $img->save($image_url);
+
+            if ($success) {
+                $data['image'] = $image_url;
+                $img = Product::where('id', $id)->first();
+                $image_path = $img->image;
+                unlink($image_path);
+
+                $update = Product::findorfail($id);
+                $update->update($data);
+            }
+        } else {
+            $oldphoto = $request->image;
+            $data['image'] = $oldphoto;
+
+            Product::where('id', $id)->update($data);
+        }
     }
 
     /**
@@ -115,6 +155,13 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::where('id', $id)->first();
+        $photo = $product->image;
+        if ($photo) {
+            unlink($photo);
+            Product::where('id', $id)->delete();
+        } else {
+            Product::where('id', $id)->delete();
+        }
     }
 }

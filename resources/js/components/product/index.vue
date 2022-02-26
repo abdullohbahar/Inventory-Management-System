@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">All Category</h1>
+                        <h1 class="m-0">All Product</h1>
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-6">
@@ -13,7 +13,7 @@
                             <li class="breadcrumb-item">
                                 <router-link to="/">Dashboard</router-link>
                             </li>
-                            <li class="breadcrumb-item active">All Category</li>
+                            <li class="breadcrumb-item active">All Product</li>
                         </ol>
                     </div>
                     <!-- /.col -->
@@ -33,9 +33,9 @@
                             <div class="card-header">
                                 <h3 class="card-title">
                                     <router-link
-                                        to="/store-category"
+                                        to="/store-product"
                                         class="btn btn-primary"
-                                        >Add Category</router-link
+                                        >Add Product</router-link
                                     >
                                 </h3>
                                 <div class="card-tools">
@@ -59,17 +59,46 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Category Name</th>
+                                            <th>Name</th>
+                                            <th>Image</th>
+                                            <th>Code</th>
+                                            <th>Category</th>
+                                            <th>Buying Price</th>
+                                            <th>Selling Price</th>
+                                            <th>Root</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr
-                                            v-for="category in filtersearch"
-                                            :key="category.id"
+                                            v-for="product in filtersearch"
+                                            :key="product.id"
                                         >
                                             <td>
-                                                {{ category.category_name }}
+                                                {{ product.product_name }}
+                                            </td>
+                                            <td>
+                                                <img
+                                                    :src="product.image"
+                                                    alt=""
+                                                    srcset=""
+                                                    id="em_photo"
+                                                />
+                                            </td>
+                                            <td>
+                                                {{ product.product_code }}
+                                            </td>
+                                            <td>
+                                                {{ product.category_name }}
+                                            </td>
+                                            <td>
+                                                {{ product.buying_price }}
+                                            </td>
+                                            <td>
+                                                {{ product.selling_price }}
+                                            </td>
+                                            <td>
+                                                {{ product.root }}
                                             </td>
                                             <td>
                                                 <div class="btn-group">
@@ -83,9 +112,9 @@
                                                     </router-link>
                                                     <router-link
                                                         :to="{
-                                                            name: 'edit-category',
+                                                            name: 'edit-product',
                                                             params: {
-                                                                id: category.id,
+                                                                id: product.id,
                                                             },
                                                         }"
                                                         type="button"
@@ -98,8 +127,8 @@
                                                     <button
                                                         type="button"
                                                         @click="
-                                                            deleteCategory(
-                                                                category.id
+                                                            deleteProduct(
+                                                                product.id
                                                             )
                                                         "
                                                         class="btn btn-danger"
@@ -156,25 +185,28 @@ export default {
 
     data() {
         return {
-            categorys: [],
+            products: [],
             searchTerm: "",
         };
     },
     computed: {
         filtersearch() {
-            return this.categorys.filter((category) => {
-                return category.category_name.match(this.searchTerm);
+            return this.products.filter((product) => {
+                return (
+                    product.product_name.match(this.searchTerm) ||
+                    product.product_code.match(this.searchTerm)
+                );
             });
         },
     },
     methods: {
-        allCategory() {
+        allProduct() {
             axios
-                .get("/api/category")
-                .then(({ data }) => (this.categorys = data))
+                .get("/api/product")
+                .then(({ data }) => (this.products = data))
                 .catch();
         },
-        deleteCategory(id) {
+        deleteProduct(id) {
             Swal.fire({
                 title: "Are you sure?",
                 text: "You won't be able to revert this!",
@@ -186,16 +218,14 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios
-                        .delete("/api/category/" + id)
+                        .delete("/api/product/" + id)
                         .then(() => {
-                            this.categorys = this.categorys.filter(
-                                (category) => {
-                                    return category.id != id;
-                                }
-                            );
+                            this.products = this.products.filter((product) => {
+                                return product.id != id;
+                            });
                         })
                         .catch(() => {
-                            this.$router.push({ name: "category" });
+                            this.$router.push({ name: "product" });
                         });
                     Swal.fire(
                         "Deleted!",
@@ -207,7 +237,7 @@ export default {
         },
     },
     created() {
-        this.allCategory();
+        this.allProduct();
     },
 };
 </script>
