@@ -33,6 +33,11 @@ let product = require("./components/product/index.vue").default;
 let storeproduct = require("./components/product/create.vue").default;
 let editproduct = require("./components/product/edit.vue").default;
 
+// Expense Page
+let expense = require("./components/expense/index.vue").default;
+let storeexpense = require("./components/expense/create.vue").default;
+let editexpense = require("./components/expense/edit.vue").default;
+
 export const routes = [
     // Dashboard Page
     {
@@ -135,5 +140,22 @@ export const routes = [
         path: "/edit-product/:id",
         component: editproduct,
         name: "edit-product",
+    },
+
+    // Expense page
+    {
+        path: "/expense",
+        component: expense,
+        name: "expense",
+    },
+    {
+        path: "/store-expense",
+        component: storeexpense,
+        name: "store-expense",
+    },
+    {
+        path: "/edit-expense/:id",
+        component: editexpense,
+        name: "edit-expense",
     },
 ];
