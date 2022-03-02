@@ -38,6 +38,13 @@ let expense = require("./components/expense/index.vue").default;
 let storeexpense = require("./components/expense/create.vue").default;
 let editexpense = require("./components/expense/edit.vue").default;
 
+// Sallary Page
+let sallary = require("./components/sallary/all_employee.vue").default;
+let paysallary = require("./components/sallary/create.vue").default;
+let allsallary = require("./components/sallary/index.vue").default;
+let viewsallary = require("./components/sallary/view.vue").default;
+let editsallary = require("./components/sallary/edit.vue").default;
+
 export const routes = [
     // Dashboard Page
     {
@@ -157,5 +164,32 @@ export const routes = [
         path: "/edit-expense/:id",
         component: editexpense,
         name: "edit-expense",
+    },
+
+    // Sallary page
+    {
+        path: "/given-sallary",
+        component: sallary,
+        name: "given-sallary",
+    },
+    {
+        path: "/pay-sallary/:id",
+        component: paysallary,
+        name: "pay-sallary",
+    },
+    {
+        path: "/sallary",
+        component: allsallary,
+        name: "sallary",
+    },
+    {
+        path: "/view-sallary/:id",
+        component: viewsallary,
+        name: "view-sallary",
+    },
+    {
+        path: "/edit-sallary/:id",
+        component: editsallary,
+        name: "edit-sallary",
     },
 ];

@@ -69,7 +69,6 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-        $expense = Expense::where('id', $id)->delete();
-        // $expense->delete();
+        Expense::where('id', $id)->delete();
     }
 }

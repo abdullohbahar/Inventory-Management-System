@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\SallaryController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\SupplierController;
@@ -39,3 +40,9 @@ Route::apiResource('/supplier', SupplierController::class);
 Route::apiResource('/category', CategoryController::class);
 Route::apiResource('/product', ProductController::class);
 Route::apiResource('/expense', ExpenseController::class);
+
+Route::post('/sallary/paid/{id}', [SallaryController::class, 'paid']);
+Route::get('/sallary', [SallaryController::class, 'allSallary']);
+Route::get('/sallary/view/{id}', [SallaryController::class, 'viewSallary']);
+Route::get('/edit/sallary/{id}', [SallaryController::class, 'editSallary']);
+Route::post('/sallary/update/{id}', [SallaryController::class, 'updateSallary']);
