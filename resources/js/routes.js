@@ -45,6 +45,10 @@ let allsallary = require("./components/sallary/index.vue").default;
 let viewsallary = require("./components/sallary/view.vue").default;
 let editsallary = require("./components/sallary/edit.vue").default;
 
+// Stock Page
+let stock = require("./components/product/stock.vue").default;
+let editstock = require("./components/product/edit_stock.vue").default;
+
 export const routes = [
     // Dashboard Page
     {
@@ -191,5 +195,17 @@ export const routes = [
         path: "/edit-sallary/:id",
         component: editsallary,
         name: "edit-sallary",
+    },
+
+    // Stock Page
+    {
+        path: "/stock",
+        component: stock,
+        name: "stock",
+    },
+    {
+        path: "/edit-stock/:id",
+        component: editstock,
+        name: "edit-stock",
     },
 ];

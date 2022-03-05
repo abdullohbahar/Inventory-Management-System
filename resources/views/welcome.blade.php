@@ -220,6 +220,14 @@
                 </li>
               </ul>
             </li>
+            <li class="nav-item">
+              <router-link to="/stock" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Stock
+                </p>
+              </router-link>
+            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
