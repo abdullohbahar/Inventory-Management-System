@@ -7,7 +7,9 @@ use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SallaryController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\PointOfSaleController;
 use App\Http\Controllers\Api\SupplierController;
 
 /*
@@ -40,9 +42,12 @@ Route::apiResource('/supplier', SupplierController::class);
 Route::apiResource('/category', CategoryController::class);
 Route::apiResource('/product', ProductController::class);
 Route::apiResource('/expense', ExpenseController::class);
+Route::apiResource('/customer', CustomerController::class);
 
 Route::post('/sallary/paid/{id}', [SallaryController::class, 'paid']);
 Route::get('/sallary', [SallaryController::class, 'allSallary']);
 Route::get('/sallary/view/{id}', [SallaryController::class, 'viewSallary']);
 Route::get('/edit/sallary/{id}', [SallaryController::class, 'editSallary']);
 Route::post('/sallary/update/{id}', [SallaryController::class, 'updateSallary']);
+
+Route::get('/get/product/{id}', [PointOfSaleController::class, 'getProduct']);

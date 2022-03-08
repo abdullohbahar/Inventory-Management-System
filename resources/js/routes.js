@@ -49,6 +49,14 @@ let editsallary = require("./components/sallary/edit.vue").default;
 let stock = require("./components/product/stock.vue").default;
 let editstock = require("./components/product/edit_stock.vue").default;
 
+// Expense Page
+let customer = require("./components/customer/index.vue").default;
+let storecustomer = require("./components/customer/create.vue").default;
+let editcustomer = require("./components/customer/edit.vue").default;
+
+// Pos Page
+let pos = require("./components/pos/index.vue").default;
+
 export const routes = [
     // Dashboard Page
     {
@@ -207,5 +215,29 @@ export const routes = [
         path: "/edit-stock/:id",
         component: editstock,
         name: "edit-stock",
+    },
+
+    // Expense page
+    {
+        path: "/customer",
+        component: customer,
+        name: "customer",
+    },
+    {
+        path: "/store-customer",
+        component: storecustomer,
+        name: "store-customer",
+    },
+    {
+        path: "/edit-customer/:id",
+        component: editcustomer,
+        name: "edit-customer",
+    },
+
+    // POS Page
+    {
+        path: "/pos",
+        component: pos,
+        name: "pos",
     },
 ];
