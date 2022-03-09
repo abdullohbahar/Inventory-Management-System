@@ -41,6 +41,8 @@ window.Toast = Toast;
 
 // SweetAlert End
 
+window.Reload = new Vue();
+
 const router = new VueRouter({
     mode: "history",
     routes, // short for `routes: routes`

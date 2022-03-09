@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CartController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -51,3 +52,8 @@ Route::get('/edit/sallary/{id}', [SallaryController::class, 'editSallary']);
 Route::post('/sallary/update/{id}', [SallaryController::class, 'updateSallary']);
 
 Route::get('/get/product/{id}', [PointOfSaleController::class, 'getProduct']);
+
+// Add To Cart
+Route::get('/addToCart/{id}', [CartController::class, 'AddToCart']);
+Route::get('/cart/product', [CartController::class, 'CartProduct']);
+Route::get('/remove/cart/{id}', [CartController::class, 'removeCart']);

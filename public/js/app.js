@@ -8485,6 +8485,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+var _created$created$data;
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -8845,73 +8847,105 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_defineProperty({
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_created$created$data = {
   created: function created() {
     if (!User.loggedIn()) {
       this.$router.push({
         name: "/"
       });
     }
-  },
-  data: function data() {
-    return {
-      products: [],
-      categories: "",
-      getproducts: [],
-      searchTerm: "",
-      searchTerm1: ""
-    };
-  },
-  computed: {
-    filtersearch: function filtersearch() {
-      var _this = this;
-
-      return this.products.filter(function (product) {
-        return product.name.match(_this.searchTerm);
-      });
-    },
-    getFilterSearch: function getFilterSearch() {
-      var _this2 = this;
-
-      return this.getproducts.filter(function (getproduct) {
-        return getproduct.product_name.match(_this2.searchTerm1);
-      });
-    }
-  },
-  methods: {
-    allProduct: function allProduct() {
-      var _this3 = this;
-
-      axios.get("/api/product").then(function (_ref) {
-        var data = _ref.data;
-        return _this3.products = data;
-      })["catch"]();
-    },
-    allCategory: function allCategory() {
-      var _this4 = this;
-
-      axios.get("/api/category").then(function (_ref2) {
-        var data = _ref2.data;
-        return _this4.categories = data;
-      })["catch"]();
-    },
-    subProduct: function subProduct(id) {
-      var _this5 = this;
-
-      axios.get("/api/get/product/" + id).then(function (_ref3) {
-        var data = _ref3.data;
-        return _this5.getproducts = data;
-      })["catch"]();
-    }
   }
-}, "created", function created() {
+}, _defineProperty(_created$created$data, "created", function created() {
+  var _this = this;
+
   this.allProduct();
   this.allCategory();
-}));
+  this.allCustomer();
+  this.cartProduct();
+  Reload.$on("afterAdd", function () {
+    _this.cartProduct();
+  });
+}), _defineProperty(_created$created$data, "data", function data() {
+  return {
+    products: [],
+    categories: "",
+    getproducts: [],
+    searchTerm: "",
+    searchTerm1: "",
+    customers: "",
+    errors: "",
+    carts: []
+  };
+}), _defineProperty(_created$created$data, "computed", {
+  filtersearch: function filtersearch() {
+    var _this2 = this;
+
+    return this.products.filter(function (product) {
+      return product.name.match(_this2.searchTerm);
+    });
+  },
+  getFilterSearch: function getFilterSearch() {
+    var _this3 = this;
+
+    return this.getproducts.filter(function (getproduct) {
+      return getproduct.product_name.match(_this3.searchTerm1);
+    });
+  }
+}), _defineProperty(_created$created$data, "methods", {
+  allProduct: function allProduct() {
+    var _this4 = this;
+
+    axios.get("/api/product").then(function (_ref) {
+      var data = _ref.data;
+      return _this4.products = data;
+    })["catch"]();
+  },
+  allCategory: function allCategory() {
+    var _this5 = this;
+
+    axios.get("/api/category").then(function (_ref2) {
+      var data = _ref2.data;
+      return _this5.categories = data;
+    })["catch"]();
+  },
+  subProduct: function subProduct(id) {
+    var _this6 = this;
+
+    axios.get("/api/get/product/" + id).then(function (_ref3) {
+      var data = _ref3.data;
+      return _this6.getproducts = data;
+    })["catch"]();
+  },
+  allCustomer: function allCustomer() {
+    var _this7 = this;
+
+    axios.get("/api/customer").then(function (_ref4) {
+      var data = _ref4.data;
+      return _this7.customers = data;
+    })["catch"]();
+  },
+  // Cart Methods
+  AddToCart: function AddToCart(id) {
+    axios.get("/api/addToCart/" + id).then(function () {
+      Reload.$emit("afterAdd");
+      Notification.cart_success();
+    })["catch"]();
+  },
+  cartProduct: function cartProduct() {
+    var _this8 = this;
+
+    axios.get("/api/cart/product").then(function (_ref5) {
+      var data = _ref5.data;
+      return _this8.carts = data;
+    })["catch"]();
+  },
+  removeItem: function removeItem(id) {
+    axios.get("/api/remove/cart/" + id).then(function () {
+      Reload.$emit("afterAdd");
+      Notification.cart_delete();
+    })["catch"]();
+  }
+}), _created$created$data);
 
 /***/ }),
 
@@ -12106,6 +12140,7 @@ var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().mixin({
 });
 window.Toast = Toast; // SweetAlert End
 
+window.Reload = new vue__WEBPACK_IMPORTED_MODULE_0__["default"]();
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: "history",
   routes: _routes__WEBPACK_IMPORTED_MODULE_2__.routes // short for `routes: routes`
@@ -12287,6 +12322,26 @@ var Notification = /*#__PURE__*/function () {
         type: "error",
         layout: "topRight",
         text: "Upload Image Less Then 1MB",
+        timeout: 1000
+      }).show();
+    }
+  }, {
+    key: "cart_success",
+    value: function cart_success() {
+      new Noty({
+        type: "success",
+        layout: "topRight",
+        text: "Successfully Added!",
+        timeout: 1000
+      }).show();
+    }
+  }, {
+    key: "cart_delete",
+    value: function cart_delete() {
+      new Noty({
+        type: "success",
+        layout: "topRight",
+        text: "Successfully Deleted!",
         timeout: 1000
       }).show();
     }
@@ -49639,10 +49694,53 @@ var render = function () {
                 ),
               ]),
               _vm._v(" "),
-              _vm._m(1),
+              _c("div", { staticClass: "card-body p-0" }, [
+                _c("table", { staticClass: "table" }, [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.carts, function (cart) {
+                      return _c("tr", { key: cart.id }, [
+                        _c("td", [_vm._v(_vm._s(cart.pro_name))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("input", {
+                            staticStyle: { width: "18px !important" },
+                            attrs: { type: "text", readonly: "" },
+                            domProps: { value: cart.pro_quantity },
+                          }),
+                          _vm._v(" "),
+                          _vm._m(2, true),
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(cart.product_price))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(cart.sub_total))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "btn btn-danger btn-sm",
+                              on: {
+                                click: function ($event) {
+                                  return _vm.removeItem(cart.id)
+                                },
+                              },
+                            },
+                            [_vm._v("X")]
+                          ),
+                        ]),
+                      ])
+                    }),
+                    0
+                  ),
+                ]),
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "card-footer" }, [
-                _vm._m(2),
+                _vm._m(3),
                 _vm._v(" "),
                 _c("br"),
                 _vm._v(" "),
@@ -49682,13 +49780,20 @@ var render = function () {
                         },
                       },
                     },
-                    [
-                      _c("option", { attrs: { value: "" } }, [_vm._v("Lorem")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "" } }, [_vm._v("Ipsum")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "" } }, [_vm._v("Sit")]),
-                    ]
+                    _vm._l(_vm.customers, function (customer) {
+                      return _c(
+                        "option",
+                        { key: customer.id, attrs: { value: "" } },
+                        [
+                          _vm._v(
+                            "\n                                        " +
+                              _vm._s(customer.name) +
+                              "\n                                    "
+                          ),
+                        ]
+                      )
+                    }),
+                    0
                   ),
                   _vm._v(" "),
                   _c("label", { attrs: { for: "" } }, [_vm._v("Pay")]),
@@ -49821,7 +49926,7 @@ var render = function () {
                   attrs: { id: "myTab", role: "tablist" },
                 },
                 [
-                  _vm._m(3),
+                  _vm._m(4),
                   _vm._v(" "),
                   _vm._l(_vm.categories, function (category) {
                     return _c(
@@ -49913,14 +50018,13 @@ var render = function () {
                             },
                             [
                               _c(
-                                "router-link",
+                                "button",
                                 {
-                                  attrs: {
-                                    to: {
-                                      name: "edit-product",
-                                      params: {
-                                        id: product.id,
-                                      },
+                                  staticClass: "btn btn-sm",
+                                  on: {
+                                    click: function ($event) {
+                                      $event.preventDefault()
+                                      return _vm.AddToCart(product.id)
                                     },
                                   },
                                 },
@@ -49990,8 +50094,7 @@ var render = function () {
                                   ),
                                 ]
                               ),
-                            ],
-                            1
+                            ]
                           )
                         }),
                         0
@@ -50052,88 +50155,68 @@ var render = function () {
                                 "col-lg-3 col-sm-6 col-md-3 col-xl-3",
                             },
                             [
-                              _c(
-                                "router-link",
-                                {
-                                  attrs: {
-                                    to: {
-                                      name: "edit-product",
-                                      params: {
-                                        id: getproduct.id,
-                                      },
-                                    },
+                              _c("a", { attrs: { href: "" } }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "card",
+                                    staticStyle: { width: "7rem" },
                                   },
-                                },
-                                [
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "card",
-                                      staticStyle: { width: "7rem" },
-                                    },
-                                    [
-                                      _c("img", {
-                                        staticClass: "card-img-top",
-                                        attrs: {
-                                          src: getproduct.image,
-                                          alt: "Card image cap",
-                                        },
-                                      }),
-                                      _vm._v(" "),
-                                      _c("div", { staticClass: "card-body" }, [
-                                        _c(
-                                          "h5",
-                                          { staticClass: "card-title" },
-                                          [
-                                            _vm._v(
-                                              "\n                                                        " +
-                                                _vm._s(
-                                                  getproduct.product_name
-                                                ) +
-                                                "\n                                                    "
-                                            ),
-                                          ]
+                                  [
+                                    _c("img", {
+                                      staticClass: "card-img-top",
+                                      attrs: {
+                                        src: getproduct.image,
+                                        alt: "Card image cap",
+                                      },
+                                    }),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "card-body" }, [
+                                      _c("h5", { staticClass: "card-title" }, [
+                                        _vm._v(
+                                          "\n                                                        " +
+                                            _vm._s(getproduct.product_name) +
+                                            "\n                                                    "
                                         ),
-                                        _vm._v(" "),
-                                        getproduct.product_quantity >= 1
-                                          ? _c("p", [
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-success",
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "Available\n                                                            " +
-                                                      _vm._s(
-                                                        getproduct.product_quantity
-                                                      )
-                                                  ),
-                                                ]
-                                              ),
-                                            ])
-                                          : _c("p", [
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-danger",
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "Out Of\n                                                            Stock"
-                                                  ),
-                                                ]
-                                              ),
-                                            ]),
                                       ]),
-                                    ]
-                                  ),
-                                ]
-                              ),
-                            ],
-                            1
+                                      _vm._v(" "),
+                                      getproduct.product_quantity >= 1
+                                        ? _c("p", [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "badge badge-success",
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "Available\n                                                            " +
+                                                    _vm._s(
+                                                      getproduct.product_quantity
+                                                    )
+                                                ),
+                                              ]
+                                            ),
+                                          ])
+                                        : _c("p", [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "badge badge-danger",
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "Out Of\n                                                            Stock"
+                                                ),
+                                              ]
+                                            ),
+                                          ]),
+                                    ]),
+                                  ]
+                                ),
+                              ]),
+                            ]
                           )
                         }),
                         0
@@ -50162,77 +50245,30 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body p-0" }, [
-      _c("table", { staticClass: "table" }, [
-        _c("thead", [
-          _c("tr", [
-            _c("th", [_vm._v("Name")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Qty")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Unit")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Total")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Action")]),
-          ]),
-        ]),
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Name")]),
         _vm._v(" "),
-        _c("tbody", [
-          _c("tr", [
-            _c("td", [_vm._v("Name")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Qty")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Unit")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Total")]),
-            _vm._v(" "),
-            _c("td", [
-              _c(
-                "a",
-                { staticClass: "btn btn-danger btn-sm", attrs: { href: "" } },
-                [_vm._v("X")]
-              ),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("td", [_vm._v("Name")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Qty")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Unit")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Total")]),
-            _vm._v(" "),
-            _c("td", [
-              _c(
-                "a",
-                { staticClass: "btn btn-danger btn-sm", attrs: { href: "" } },
-                [_vm._v("X")]
-              ),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("td", [_vm._v("Name")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Qty")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Unit")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Total")]),
-            _vm._v(" "),
-            _c("td", [
-              _c(
-                "a",
-                { staticClass: "btn btn-danger btn-sm", attrs: { href: "" } },
-                [_vm._v("X")]
-              ),
-            ]),
-          ]),
-        ]),
+        _c("th", [_vm._v("Qty")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Unit")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Action")]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "btn-group-vertical" }, [
+      _c("button", { staticClass: "btn btn-info btn-sm" }, [
+        _c("i", { staticClass: "fas fa-angle-up" }),
+      ]),
+      _c("button", { staticClass: "btn btn-warning btn-sm" }, [
+        _c("i", { staticClass: "fas fa-angle-down" }),
       ]),
     ])
   },

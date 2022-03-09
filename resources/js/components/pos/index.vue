@@ -53,40 +53,41 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Name</td>
-                                            <td>Qty</td>
-                                            <td>Unit</td>
-                                            <td>Total</td>
+                                        <tr
+                                            v-for="cart in carts"
+                                            :key="cart.id"
+                                        >
+                                            <td>{{ cart.pro_name }}</td>
                                             <td>
-                                                <a
-                                                    href=""
-                                                    class="btn btn-danger btn-sm"
-                                                    >X</a
-                                                >
+                                                <input
+                                                    type="text"
+                                                    :value="cart.pro_quantity"
+                                                    readonly
+                                                    style="
+                                                        width: 18px !important;
+                                                    "
+                                                />
+                                                <div class="btn-group-vertical">
+                                                    <button
+                                                        class="btn btn-info btn-sm"
+                                                    >
+                                                        <i
+                                                            class="fas fa-angle-up"
+                                                        ></i></button
+                                                    ><button
+                                                        class="btn btn-warning btn-sm"
+                                                    >
+                                                        <i
+                                                            class="fas fa-angle-down"
+                                                        ></i>
+                                                    </button>
+                                                </div>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Name</td>
-                                            <td>Qty</td>
-                                            <td>Unit</td>
-                                            <td>Total</td>
+                                            <td>{{ cart.product_price }}</td>
+                                            <td>{{ cart.sub_total }}</td>
                                             <td>
                                                 <a
-                                                    href=""
-                                                    class="btn btn-danger btn-sm"
-                                                    >X</a
-                                                >
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Name</td>
-                                            <td>Qty</td>
-                                            <td>Unit</td>
-                                            <td>Total</td>
-                                            <td>
-                                                <a
-                                                    href=""
+                                                    @click="removeItem(cart.id)"
                                                     class="btn btn-danger btn-sm"
                                                     >X</a
                                                 >
@@ -127,9 +128,13 @@
                                         class="form-control"
                                         id=""
                                     >
-                                        <option value="">Lorem</option>
-                                        <option value="">Ipsum</option>
-                                        <option value="">Sit</option>
+                                        <option
+                                            v-for="customer in customers"
+                                            :key="customer.id"
+                                            value=""
+                                        >
+                                            {{ customer.name }}
+                                        </option>
                                     </select>
                                     <label for="">Pay</label>
                                     <input
@@ -227,13 +232,11 @@
                                             v-for="product in filtersearch"
                                             :key="product.id"
                                         >
-                                            <router-link
-                                                :to="{
-                                                    name: 'edit-product',
-                                                    params: {
-                                                        id: product.id,
-                                                    },
-                                                }"
+                                            <button
+                                                class="btn btn-sm"
+                                                @click.prevent="
+                                                    AddToCart(product.id)
+                                                "
                                             >
                                                 <div
                                                     class="card"
@@ -271,7 +274,7 @@
                                                         </p>
                                                     </div>
                                                 </div>
-                                            </router-link>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -298,14 +301,7 @@
                                             v-for="getproduct in getFilterSearch"
                                             :key="getproduct.id"
                                         >
-                                            <router-link
-                                                :to="{
-                                                    name: 'edit-product',
-                                                    params: {
-                                                        id: getproduct.id,
-                                                    },
-                                                }"
-                                            >
+                                            <a href="">
                                                 <div
                                                     class="card"
                                                     style="width: 7rem"
@@ -344,7 +340,7 @@
                                                         </p>
                                                     </div>
                                                 </div>
-                                            </router-link>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -367,6 +363,15 @@ export default {
             this.$router.push({ name: "/" });
         }
     },
+    created() {
+        this.allProduct();
+        this.allCategory();
+        this.allCustomer();
+        this.cartProduct();
+        Reload.$on("afterAdd", () => {
+            this.cartProduct();
+        });
+    },
 
     data() {
         return {
@@ -375,6 +380,9 @@ export default {
             getproducts: [],
             searchTerm: "",
             searchTerm1: "",
+            customers: "",
+            errors: "",
+            carts: [],
         };
     },
     computed: {
@@ -408,10 +416,38 @@ export default {
                 .then(({ data }) => (this.getproducts = data))
                 .catch();
         },
-    },
-    created() {
-        this.allProduct();
-        this.allCategory();
+        allCustomer() {
+            axios
+                .get("/api/customer")
+                .then(({ data }) => (this.customers = data))
+                .catch();
+        },
+        // Cart Methods
+        AddToCart(id) {
+            axios
+                .get("/api/addToCart/" + id)
+                .then(() => {
+                    Reload.$emit("afterAdd");
+                    Notification.cart_success();
+                })
+                .catch();
+        },
+        cartProduct() {
+            axios
+                .get("/api/cart/product")
+                .then(({ data }) => (this.carts = data))
+                .catch();
+        },
+
+        removeItem(id) {
+            axios
+                .get("/api/remove/cart/" + id)
+                .then(() => {
+                    Reload.$emit("afterAdd");
+                    Notification.cart_delete();
+                })
+                .catch();
+        },
     },
 };
 </script>
