@@ -64,18 +64,40 @@
                                                     :value="cart.pro_quantity"
                                                     readonly
                                                     style="
-                                                        width: 18px !important;
+                                                        width: 30px !important;
                                                     "
                                                 />
                                                 <div class="btn-group-vertical">
                                                     <button
                                                         class="btn btn-info btn-sm"
+                                                        @click.prevent="
+                                                            increment(cart.id)
+                                                        "
                                                     >
                                                         <i
                                                             class="fas fa-angle-up"
                                                         ></i></button
                                                     ><button
                                                         class="btn btn-warning btn-sm"
+                                                        @click.prevent="
+                                                            decrement(cart.id)
+                                                        "
+                                                        v-if="
+                                                            cart.pro_quantity >=
+                                                            2
+                                                        "
+                                                    >
+                                                        <i
+                                                            class="fas fa-angle-down"
+                                                        ></i>
+                                                    </button>
+                                                    <button
+                                                        class="btn btn-warning btn-sm"
+                                                        @click.prevent="
+                                                            decrement(cart.id)
+                                                        "
+                                                        v-else
+                                                        disabled
                                                     >
                                                         <i
                                                             class="fas fa-angle-down"
@@ -101,22 +123,23 @@
                                     <li
                                         class="list-group-item d-flex justify-content-between align-items-center"
                                     >
-                                        Total Quantity: <strong>902</strong>
+                                        Total Quantity:
+                                        <strong>{{ qty }}</strong>
                                     </li>
                                     <li
                                         class="list-group-item d-flex justify-content-between align-items-center"
                                     >
-                                        Sub Total: <strong>90242 $</strong>
+                                        Sub Total: <strong>{{ subtotal }} $</strong>
                                     </li>
                                     <li
                                         class="list-group-item d-flex justify-content-between align-items-center"
                                     >
-                                        Vat: <strong>31 %</strong>
+                                        Vat: <strong>{{ vats.vat }} %</strong>
                                     </li>
                                     <li
                                         class="list-group-item d-flex justify-content-between align-items-center"
                                     >
-                                        Total Amount: <strong>902$</strong>
+                                        Total Amount: <strong>{{ subtotal * vats.vat/100 + subtotal }}$</strong>
                                     </li>
                                 </ul>
                                 <br />
@@ -301,7 +324,12 @@
                                             v-for="getproduct in getFilterSearch"
                                             :key="getproduct.id"
                                         >
-                                            <a href="">
+                                            <button
+                                                class="btn btn-sm"
+                                                @click.prevent="
+                                                    AddToCart(getproduct.id)
+                                                "
+                                            >
                                                 <div
                                                     class="card"
                                                     style="width: 7rem"
@@ -340,7 +368,7 @@
                                                         </p>
                                                     </div>
                                                 </div>
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -368,6 +396,7 @@ export default {
         this.allCategory();
         this.allCustomer();
         this.cartProduct();
+        this.vat();
         Reload.$on("afterAdd", () => {
             this.cartProduct();
         });
@@ -383,6 +412,7 @@ export default {
             customers: "",
             errors: "",
             carts: [],
+            vats: "",
         };
     },
     computed: {
@@ -395,6 +425,23 @@ export default {
             return this.getproducts.filter((getproduct) => {
                 return getproduct.product_name.match(this.searchTerm1);
             });
+        },
+        qty() {
+            let sum = 0;
+            for (let i = 0; i < this.carts.length; i++) {
+                sum += parseFloat(this.carts[i].pro_quantity);
+            }
+            return sum;
+        },
+        subtotal() {
+            let sum = 0;
+            for (let i = 0; i < this.carts.length; i++) {
+                sum +=
+                    parseFloat(this.carts[i].pro_quantity) *
+                    parseFloat(this.carts[i].product_price);
+            }
+
+            return sum;
         },
     },
     methods: {
@@ -446,6 +493,30 @@ export default {
                     Reload.$emit("afterAdd");
                     Notification.cart_delete();
                 })
+                .catch();
+        },
+        increment(id) {
+            axios
+                .get("/api/increment/" + id)
+                .then(() => {
+                    Reload.$emit("afterAdd");
+                    Notification.success();
+                })
+                .catch();
+        },
+        decrement(id) {
+            axios
+                .get("/api/decrement/" + id)
+                .then(() => {
+                    Reload.$emit("afterAdd");
+                    Notification.success();
+                })
+                .catch();
+        },
+        vat() {
+            axios
+                .get("/api/vats")
+                .then(({ data }) => (this.vats = data))
                 .catch();
         },
     },
