@@ -232,6 +232,29 @@
               <a href="#" class="nav-link">
                 <i class="fas fa-user-plus"></i>
                 <p>
+                  Orders
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <router-link to="/order" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Today Order</p>
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/searchorder" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Search Order</p>
+                  </router-link>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fas fa-user-plus"></i>
+                <p>
                   Customer
                   <i class="right fas fa-angle-left"></i>
                 </p>

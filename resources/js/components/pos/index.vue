@@ -129,7 +129,8 @@
                                     <li
                                         class="list-group-item d-flex justify-content-between align-items-center"
                                     >
-                                        Sub Total: <strong>{{ subtotal }} $</strong>
+                                        Sub Total:
+                                        <strong>{{ subtotal }} $</strong>
                                     </li>
                                     <li
                                         class="list-group-item d-flex justify-content-between align-items-center"
@@ -139,12 +140,18 @@
                                     <li
                                         class="list-group-item d-flex justify-content-between align-items-center"
                                     >
-                                        Total Amount: <strong>{{ subtotal * vats.vat/100 + subtotal }}$</strong>
+                                        Total Amount:
+                                        <strong
+                                            >{{
+                                                (subtotal * vats.vat) / 100 +
+                                                subtotal
+                                            }}$</strong
+                                        >
                                     </li>
                                 </ul>
                                 <br />
                                 <br />
-                                <form action="">
+                                <form @submit.prevent="orderDone">
                                     <label for="">Customer Name</label>
                                     <select
                                         v-model="customer_id"
@@ -154,7 +161,7 @@
                                         <option
                                             v-for="customer in customers"
                                             :key="customer.id"
-                                            value=""
+                                            :value="customer.id"
                                         >
                                             {{ customer.name }}
                                         </option>
@@ -404,6 +411,10 @@ export default {
 
     data() {
         return {
+            customer_id: "",
+            pay: "",
+            due: "",
+            payment_method: "",
             products: [],
             categories: "",
             getproducts: [],
@@ -518,6 +529,24 @@ export default {
                 .get("/api/vats")
                 .then(({ data }) => (this.vats = data))
                 .catch();
+        },
+        orderDone() {
+            let total = (this.subtotal * this.vats.vat) / 100 + this.subtotal;
+            var data = {
+                qty: this.qty,
+                subtotal: this.subtotal,
+                customer_id: this.customer_id,
+                payment_method: this.payment_method,
+                pay: this.pay,
+                vat: this.vats.vat,
+                total: total,
+                due: this.due,
+            };
+
+            axios.post("/api/orderdone", data).then(() => {
+                Notification.success();
+                this.$router.push({ name: "home" });
+            });
         },
     },
 };

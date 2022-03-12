@@ -57,6 +57,11 @@ let editcustomer = require("./components/customer/edit.vue").default;
 // Pos Page
 let pos = require("./components/pos/index.vue").default;
 
+// Order Page
+let order = require("./components/order/index.vue").default;
+let vieworder = require("./components/order/view_order.vue").default;
+let searchorder = require("./components/order/search_order.vue").default;
+
 export const routes = [
     // Dashboard Page
     {
@@ -239,5 +244,22 @@ export const routes = [
         path: "/pos",
         component: pos,
         name: "pos",
+    },
+
+    // Order Page
+    {
+        path: "/order",
+        component: order,
+        name: "order",
+    },
+    {
+        path: "/view-order/:id",
+        component: vieworder,
+        name: "view-order",
+    },
+    {
+        path: "/searchorder",
+        component: searchorder,
+        name: "searchorder",
     },
 ];

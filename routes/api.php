@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\SallaryController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PointOfSaleController;
 use App\Http\Controllers\Api\SupplierController;
 
@@ -62,3 +63,18 @@ Route::get('/decrement/{id}', [CartController::class, 'decrement']);
 
 // Vat
 Route::get('/vats', [CartController::class, 'vat']);
+
+// Order
+Route::post('/orderdone', [PointOfSaleController::class, 'orderDone']);
+
+Route::get('/orders', [OrderController::class, 'todayOrder']);
+Route::get('/order/details/{id}', [OrderController::class, 'orderDetails']);
+Route::get('/order/orderDetails/{id}', [OrderController::class, 'orderDetailsAll']);
+Route::post('/search/order', [PointOfSaleController::class, 'searchOrder']);
+
+// Dashboard
+Route::get('/today/sell', [PointOfSaleController::class, 'todaySell']);
+Route::get('/today/income', [PointOfSaleController::class, 'todayIncome']);
+Route::get('/today/due', [PointOfSaleController::class, 'todayDue']);
+Route::get('/today/expense', [PointOfSaleController::class, 'todayExpense']);
+Route::get('/today/stockOut', [PointOfSaleController::class, 'stockOut']);
